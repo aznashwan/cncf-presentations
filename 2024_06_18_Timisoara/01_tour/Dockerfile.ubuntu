@@ -1,0 +1,39 @@
+# Declare our base Docker image (the official Ubuntu 22.04 image)
+FROM ubuntu:22.04
+
+# First and foremost, we should obviously add our application code!
+# You can COPY existing files/directories from your host system:
+COPY ./flask_app.py /flask_app.py
+
+# NOTE: there is also an "ADD" stanza which also auto-extracts archives on copy.
+# ADD ./some-supporting-files.zip /directory-to-extract-in
+
+# Now, in order for the Python app to run, we'll need to install Python!
+# Because we started from an Ubuntu base image, we have access to "apt",
+# so let's use it to install Python and Pip. (tool to install Python libraries)
+# NOTE: the "-y" argument is VERY important, as "apt" will hang otherwise.
+RUN apt update && apt-get install -y python3 python3-pip iproute2 curl
+# We also use pip to install Flask, the web framework our app will use:
+RUN pip3 install Flask
+
+# Declare a build argument. This value can be manipulated during build time.
+# We can use `docker build --build-arg LISTEN_ON_HOST=0.0.0.0` to change it!
+ARG LISTEN_ON_HOST=localhost
+ENV LISTEN_ON_HOST=${LISTEN_ON_HOST}
+
+# Declare an Environment variable. This value can be manipulated during runtime.
+# We can use `docker run -e FLASK_APP_PORT=1234` to change it!
+ENV FLASK_APP_PORT=8080
+
+# Next, we need to tell Docker which port we plan on running our app on.
+# For this, we can sumply reference the "${FLASK_APP_PORT}" build argument:
+EXPOSE ${FLASK_APP_PORT}
+
+# Finally, we need to tell Docker what is this container image's "entrypoint".
+# This is basically the command that Docker will run when the container starts.
+# The Entrypoint is a list containing the executable name ("python3" for us)
+# and the arguments for the app (in our case, the hostname and port to listen on)
+ENTRYPOINT python3 "/flask_app.py" $LISTEN_ON_HOST $FLASK_APP_PORT
+
+# NOTE: there is also a "CMD" stanza which acts similarly but is overridable.
+# CMD python3 "/flask_app.py" $LISTEN_ON_HOST $FLASK_APP_PORT

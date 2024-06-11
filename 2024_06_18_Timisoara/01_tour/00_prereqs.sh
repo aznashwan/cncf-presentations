@@ -10,4 +10,7 @@ fi
 apt-get update -y
 
 # Utilities for poking around:
-apt-get install -y libcap2-bin
+apt-get install -y libcap2-bin cgroup-tools
+
+# Prereqs for touring LXC:
+apt-get install -y lxc-utils lxc-templates
