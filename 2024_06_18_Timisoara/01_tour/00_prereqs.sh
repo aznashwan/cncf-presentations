@@ -9,7 +9,13 @@ fi
 
 apt-get update -y
 
-# Utilities for poking around:
+# Install general system query utilities:
+apt-get install -y tree psmisc util-linux mlocate jq
+
+# Pre-install Python and Pip for the test flask app:
+apt-get install -y python3 python3-pip
+
+# Utilities for poking around cgroups/caps:
 apt-get install -y libcap2-bin cgroup-tools
 
 # Prereqs for touring LXC:

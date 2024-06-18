@@ -23,6 +23,7 @@ ip link set dev veth0 up
 # Set IP and UP on the veth from within the network namespace:
 ip netns exec ns1 ip addr add 192.168.200.2/24 dev veth1
 ip netns exec ns1 ip link set dev veth1 up
+ip netns exec ns1 ip link set dev lo up
 
 # Exec commands in namespace using:
 ip netns exec ns1 ping -c 3 192.168.200.1

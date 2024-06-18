@@ -12,7 +12,7 @@ SANDBOX_DIR="/sandbox"
 mkdir -p "$SANDBOX_DIR"
 
 for dir in /bin /etc /lib* /sbin /usr /var; do cp -r $dir "${SANDBOX_DIR}${dir}"; done
-for dir in /boot /proc /dev /mnt /root /run /tmp; do mkdir -p "${SANDBOX_DIR}${dir}"; done
+for dir in /boot /proc /dev /mnt /root /run /sys /tmp; do mkdir -p "${SANDBOX_DIR}${dir}"; done
 
 # Patch /etc/resolv.conf so we can have DNS in the 'container'
 rm "$SANDBOX_DIR/etc/resolv.conf" || true
